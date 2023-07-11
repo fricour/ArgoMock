@@ -12,3 +12,15 @@ bgc_index <- bgc_index |>
   dplyr::distinct()
 
 usethis::use_data(bgc_index, overwrite = TRUE)
+
+
+## same but not on the SYNTHETIC profile index, now it's on the BIO profile index..
+bio_index <- read.table('data-raw/argo_bio-profile_index.txt', skip = 8, h=TRUE, sep = ",")
+
+# extract wmo and clean a bit
+bio_index <- bio_index |>
+  dplyr::select(file, date, latitude, longitude, parameters, parameter_data_mode) |>
+  dplyr::mutate(wmo = purrr::map_chr(.x = bio_index$file, .f = function(x) unlist(stringr::str_split(x, '/'))[2])) |>
+  dplyr::distinct()
+
+usethis::use_data(bio_index, overwrite = TRUE)

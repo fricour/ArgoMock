@@ -10,10 +10,11 @@ app_ui <- function(request) {
     golem_add_external_resources(),
     # Your application UI logic
     fluidPage(
-      titlePanel("Download BGC-Argo float data"),
+      titlePanel("Visualize BGC-Argo data"),
       sidebarLayout(
-        sidebarPanel =  sidebarPanel(mod_sidebar_ui("sidebar_1")),
-        mainPanel = mainPanel(mod_main_ui("main_1"))
+        sidebarPanel = sidebarPanel(mod_select_float_ui("sidebar_1"),
+                                    width = 3),
+        mainPanel = mainPanel(mod_main_plot_ui("main_plot_1"))
       )
     )
   )
