@@ -21,7 +21,7 @@ mod_select_float_ui <- function(id){
     selectizeInput(inputId = ns("params"),
                    label = "Available parameters",
                    choices = "",
-                   multiple = FALSE
+                   multiple = TRUE
     )
   )
 }
@@ -37,13 +37,17 @@ mod_select_float_server <- function(id){
     observe({
       all_parameters <- unique(unlist(purrr::map(dplyr::filter(ArgoDownload::bio_index, wmo == input$wmo)$parameters, .f = function(x) stringr::str_split(x, pattern = ' '))))
       # add temperature and salinity to bio data
-      all_parameters <- c("TEMP","PSAL", all_parameters)
+      #all_parameters <- c("TEMP","PSAL", all_parameters)
       # remove MEDIAN and STD parameters (not needed here)
       all_parameters <- stringr::str_subset(all_parameters, "MED", negate = TRUE)
       all_parameters <- stringr::str_subset(all_parameters, "STD", negate = TRUE)
+      # remove the pressure field (PRES)
+      all_parameters <- all_parameters[-1]
+      # remove
       updateSelectInput(session,
                         "params",
-                        choices = all_parameters)
+                        choices = all_parameters,
+                        selected = 'DOXY')
     })
 
     # list of ascending profiles

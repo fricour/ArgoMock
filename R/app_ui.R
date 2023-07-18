@@ -14,7 +14,8 @@ app_ui <- function(request) {
       sidebarLayout(
         sidebarPanel = sidebarPanel(mod_select_float_ui("sidebar_1"),
                                     width = 3),
-        mainPanel = mainPanel(mod_main_plot_ui("main_plot_1"))
+        mainPanel = mainPanel(
+          mod_main_plot_ui("main_plot_1"))
       )
     )
   )
