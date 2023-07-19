@@ -19,9 +19,9 @@ mod_select_float_ui <- function(id){
                    choices = ""
     ),
     selectizeInput(inputId = ns("params"),
-                   label = "Available parameters",
+                   label = "Other parameters",
                    choices = "",
-                   multiple = TRUE
+                   multiple = FALSE
     )
   )
 }
@@ -35,19 +35,22 @@ mod_select_float_server <- function(id){
 
     # list of parameters based on selected WMO
     observe({
-      all_parameters <- unique(unlist(purrr::map(dplyr::filter(ArgoDownload::bio_index, wmo == input$wmo)$parameters, .f = function(x) stringr::str_split(x, pattern = ' '))))
-      # add temperature and salinity to bio data
-      #all_parameters <- c("TEMP","PSAL", all_parameters)
-      # remove MEDIAN and STD parameters (not needed here)
-      all_parameters <- stringr::str_subset(all_parameters, "MED", negate = TRUE)
-      all_parameters <- stringr::str_subset(all_parameters, "STD", negate = TRUE)
-      # remove the pressure field (PRES)
-      all_parameters <- all_parameters[-1]
-      # remove
+      other_parameters <- unique(unlist(purrr::map(dplyr::filter(ArgoDownload::bio_index, wmo == input$wmo)$parameters, .f = function(x) stringr::str_split(x, pattern = ' '))))
+
+      # set bgc parameters (to be completed..)
+      bgc_params <- c('DOXY', 'CHLA', 'BBP700', 'CDOM', 'TRANSMITTANCE_PARTICLE_BEAM_ATTENUATION660', 'NITRATE', 'PH_IN_SITU_FREE',
+                      'DOWN_IRRADIANCE380', 'DOWN_IRRADIANCE412', 'DOWN_IRRADIANCE490', 'DOWNWELLING_PAR')
+
+      # remove bgc parameters
+      other_parameters <- dplyr::setdiff(other_parameters, bgc_params)
+
+      # remove pressure field (depth)
+      all_parameters <- stringr::str_subset(other_parameters, "PRES", negate = TRUE)
+
       updateSelectInput(session,
                         "params",
                         choices = all_parameters,
-                        selected = 'DOXY')
+                        selected = '')
     })
 
     # list of ascending profiles
