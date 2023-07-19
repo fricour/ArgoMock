@@ -13,7 +13,8 @@ Imports:
     golem (>= 0.4.1),
     shiny (>= 1.7.4),
     tidyverse,
-    DT
+    DT,
+    magrittr
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.2.3
