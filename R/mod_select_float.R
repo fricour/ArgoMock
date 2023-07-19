@@ -45,11 +45,11 @@ mod_select_float_server <- function(id){
       other_parameters <- dplyr::setdiff(other_parameters, bgc_params)
 
       # remove pressure field (depth)
-      all_parameters <- stringr::str_subset(other_parameters, "PRES", negate = TRUE)
+      other_parameters <- stringr::str_subset(other_parameters, "PRES", negate = TRUE)
 
       updateSelectInput(session,
                         "params",
-                        choices = all_parameters,
+                        choices = other_parameters,
                         selected = '')
     })
 
