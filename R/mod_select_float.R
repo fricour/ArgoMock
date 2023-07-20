@@ -12,16 +12,16 @@ mod_select_float_ui <- function(id){
   tagList(
     selectInput(inputId = ns("wmo"),
                 label = "Float WMO",
-                choices = list.dirs("inst/extdata/", full.names = FALSE, recursive = FALSE)
+                choices =list.dirs("/data1/GDAC/GDAC/coriolis/", recursive = F, full.names = F)
     ),
     selectizeInput(inputId = ns("cycle"),
                    label = "Cycle number",
                    choices = ""
     ),
     selectizeInput(inputId = ns("params"),
-                   label = "Available parameters",
+                   label = "Other parameters",
                    choices = "",
-                   multiple = TRUE
+                   multiple = FALSE
     )
   )
 }
@@ -33,27 +33,35 @@ mod_select_float_server <- function(id){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
 
+    # read bio index
+    bio_index <- vroom::vroom('/home/ricour/ArgoMock/data-raw/bio_index.csv')
+
     # list of parameters based on selected WMO
     observe({
-      all_parameters <- unique(unlist(purrr::map(dplyr::filter(ArgoDownload::bio_index, wmo == input$wmo)$parameters, .f = function(x) stringr::str_split(x, pattern = ' '))))
-      # add temperature and salinity to bio data
-      #all_parameters <- c("TEMP","PSAL", all_parameters)
-      # remove MEDIAN and STD parameters (not needed here)
-      all_parameters <- stringr::str_subset(all_parameters, "MED", negate = TRUE)
-      all_parameters <- stringr::str_subset(all_parameters, "STD", negate = TRUE)
-      # remove the pressure field (PRES)
-      all_parameters <- all_parameters[-1]
-      # remove
+      other_parameters <- unique(unlist(purrr::map(dplyr::filter(bio_index, wmo == input$wmo)$parameters, .f = function(x) stringr::str_split(x, pattern = ' '))))
+
+      # set bgc parameters (to be completed..)
+      bgc_params <- c('DOXY', 'CHLA', 'BBP700', 'TRANSMITTANCE_PARTICLE_BEAM_ATTENUATION660', 'PH_IN_SITU_FREE', 'NITRATE', 'CDOM',
+                      'DOWN_IRRADIANCE380', 'DOWN_IRRADIANCE412', 'DOWN_IRRADIANCE490', 'DOWNWELLING_PAR')
+
+      # remove bgc parameters
+      other_parameters <- dplyr::setdiff(other_parameters, bgc_params)
+
+      # remove pressure field (depth)
+      other_parameters <- stringr::str_subset(other_parameters, "PRES", negate = TRUE)
+
       updateSelectInput(session,
                         "params",
-                        choices = all_parameters,
-                        selected = 'DOXY')
+                        choices = other_parameters,
+                        selected = '')
     })
 
     # list of ascending profiles
     observe({
-      # keep only bio profiles
-      ascending_cycles <- stringr::str_subset(list.files(paste0("inst/extdata/",input$wmo,"/profiles/")), pattern = "B")
+      # count only ascending profiles (do not count profiles starting with B or S)
+      ascending_cycles <- stringr::str_subset(list.files(paste0('/data1/GDAC/GDAC/coriolis/',input$wmo,'/profiles/')), pattern = "B", negate = TRUE)
+      ascending_cycles <- stringr::str_subset(ascending_cycles, pattern = "S", negate = TRUE)
+
       # remove descending profile(s)
       ascending_cycles <- stringr::str_subset(ascending_cycles, pattern = "D.nc", negate = TRUE)
       # update number of cycle based on selected float
