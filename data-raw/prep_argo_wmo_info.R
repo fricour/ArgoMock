@@ -39,3 +39,7 @@ bio_index <- bio_index %>%
 #usethis::use_data(bio_index, overwrite = TRUE)
 # write to csv (not in a pqckage fashion using testhis but eh, those data are a mess)
 vroom::vroom_write(bio_index, file = '/data-raw/bio_index.csv')
+
+# C-Rover calibration
+c_rover_calib <- vroom::vroom('data-raw/crover_calibration.csv')
+usethis::use_data(c_rover_calib, overwrite = TRUE)

@@ -91,7 +91,7 @@ mod_main_plot_server <- function(id, user_float_cycle){
     plots_of_selected_parameters <- reactive({
       shiny::validate(
         need(nrow(data_bio()) > 0, message = 'No bio-optical data'))
-      purrr::map(bgc_params, make_marker_plot, tb = data_bio())
+      purrr::map(bgc_params, make_marker_plot, tb = data_bio(), wmo = user_float_cycle$wmo())
     })
 
     # plot bio data

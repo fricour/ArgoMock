@@ -172,10 +172,18 @@ get_plot_attributes <- function(parameter){
 #' @example
 #' tmp <- extract_BGC_parameters(ncfile = '/data1/GDAC/GDAC/coriolis/6904240/profiles/BR6904240_001.nc')
 #' make_marker_plot(tmp, 'DOXY')
-make_marker_plot <- function(tb, parameter_name){
+make_marker_plot <- function(tb, parameter_name, wmo){
 
   # filter tb by parameter_name
   tmp <- tb %>% dplyr::filter(parameter == parameter_name, !is.na(depth))
+
+  # special case for the CP660 (at this time, values needs to be converted)
+  if(parameter_name == 'TRANSMITTANCE_PARTICLE_BEAM_ATTENUATION660'){
+    CSCdark <- ArgoDownload::c_rover_calib[ArgoDownload::c_rover_calib$WMO == wmo,]$CSCdark
+    CSCcal <- ArgoDownload::c_rover_calib[ArgoDownload::c_rover_calib$WMO == wmo,]$CSCcal
+    x <- 0.25
+    tmp$value <- -log((tmp$value - CSCdark)/(CSCcal-CSCdark))/x
+  }
 
   # convert QC to strings for discrete colours
   tmp$qc <- as.character(tmp$qc)
@@ -194,7 +202,7 @@ make_marker_plot <- function(tb, parameter_name){
                   colors = pal,
                   legendgroup = ~qc,
                   hovertemplate = paste(" DEPTH: %{y:,.0f} m<br>", paste0(plot_attributes[[1]],": ",plot_attributes[[2]],"<br>"), paste0('QC: %{text:, .0f}'))) %>%
-    plotly::layout(xaxis = list(title = parameter_name, type = plot_attributes[[3]]),
+    plotly::layout(xaxis = list(title = plot_attributes[[1]], type = plot_attributes[[3]]),
                    yaxis = list(title = 'DEPTH', autorange = "reversed"),
                    showlegend = FALSE) #%>% plotly::toWebGL()
 
