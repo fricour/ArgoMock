@@ -13,7 +13,7 @@ mod_main_plot_ui <- function(id){
   ns <- NS(id)
   tagList(
     box(title = "Physical data", status = "primary", solidHeader = TRUE, collapsible = TRUE,
-        plotlyOutput(ns("plot_vertical_phys_profile"), width = "800px")),
+        plotlyOutput(ns("plot_vertical_phys_profile"))),
     box(title = "Biogeochemical data", status = "primary", solidHeader = TRUE, collapsible = FALSE,
       plotlyOutput(ns("plot_vertical_bio_profile"), height = "1000px"))
   )
@@ -78,7 +78,7 @@ mod_main_plot_server <- function(id, user_float_cycle){
 
       # extract data from NetCDF for all selected variables
       # check if NetCDF exists in raw format
-      print(paste0('/data1/GDAC/GDAC/coriolis/',wmo,'/profiles/'))
+      #print(paste0('/data1/GDAC/GDAC/coriolis/',wmo,'/profiles/'))
       if(length(list.files(paste0('/data1/GDAC/GDAC/coriolis/',wmo,'/profiles/'), pattern = 'B')) == 0){ # no bio-optical data
         NULL
       }else if(file.exists(paste0('/data1/GDAC/GDAC/coriolis/',wmo,'/profiles/BR',wmo,'_',cycle,'.nc'))){ # check if data exists in raw (non delayed mode) format

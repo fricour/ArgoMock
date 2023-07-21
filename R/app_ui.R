@@ -9,19 +9,6 @@ app_ui <- function(request) {
     # Leave this function for adding external resources
     golem_add_external_resources(),
     # Your application UI logic
-    # fluidPage(
-    #   titlePanel("Visualize BGC-Argo data (from Coriolis)"),
-    #   sidebarLayout(
-    #     sidebarPanel = sidebarPanel(mod_select_float_ui("sidebar"),
-    #                                 width = 2),
-    #     mainPanel = mainPanel(
-    #       tabsetPanel(
-    #         tabPanel("Core profiles",
-    #                  mod_main_plot_ui("main_plot")),
-    #         tabPanel("Auxiliary profiles"))
-    #     )
-    #   )
-    # )
     dashboardPage(
       dashboardHeader(
         title = 'Visualize BGC-Argo data (from Coriolis)'
@@ -33,7 +20,8 @@ app_ui <- function(request) {
         tabsetPanel(
             tabPanel("Core profiles",
                     mod_main_plot_ui("main_plot")),
-            tabPanel("Auxiliary profiles"))
+            tabPanel("Auxiliary profiles",
+                    mod_auxiliary_file_ui("aux_file")))
         )
       )
   )

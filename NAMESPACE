@@ -2,10 +2,12 @@
 
 export("%>%")
 export(extract_BGC_parameters)
+export(extract_LPM)
 export(extract_TS)
 export(extract_parameter)
 export(get_plot_attributes)
 export(make_marker_plot)
+export(particle_plot)
 export(run_app)
 import(shiny)
 import(shinydashboard)

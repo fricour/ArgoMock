@@ -208,3 +208,25 @@ make_marker_plot <- function(tb, parameter_name, wmo){
                    showlegend = FALSE) #%>% plotly::toWebGL()
 
 }
+
+#' @description Function to plot particle data
+#'
+#' @param data a tibble with 19 columns (18 size classes and depth)
+#'
+#' @return a plotly plot
+#'
+#' @export
+#'
+#' @noRd
+#'
+#' @example
+#' particle_plot(tb, 'NP_Size_50.8')
+particle_plot <- function(size_name, data){
+
+  plotly::plot_ly(data, y = ~depth, x = ~get(size_name), type = 'scatter', mode = 'markers', color = I('black'),
+          name = size_name, hovertemplate = paste("DEPTH: %{y:,.0f} m<br>",
+                                                  'Part. concentration: %{x:,.1f} #/L',
+                                                  '<extra></extra>')) %>%
+    plotly::layout(xaxis = list(title = paste0(size_name, ' [#/L]')), yaxis = list(title = 'DEPTH', autorange = "reversed"), showlegend = FALSE)
+
+}
