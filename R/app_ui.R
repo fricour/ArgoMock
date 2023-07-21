@@ -2,22 +2,40 @@
 #'
 #' @param request Internal parameter for `{shiny}`.
 #'     DO NOT REMOVE.
-#' @import shiny
+#' @import shiny shinydashboard
 #' @noRd
 app_ui <- function(request) {
   tagList(
     # Leave this function for adding external resources
     golem_add_external_resources(),
     # Your application UI logic
-    fluidPage(
-      titlePanel("Visualize BGC-Argo data (from Coriolis)"),
-      sidebarLayout(
-        sidebarPanel = sidebarPanel(mod_select_float_ui("sidebar_1"),
-                                    width = 3),
-        mainPanel = mainPanel(
-          mod_main_plot_ui("main_plot_1"))
+    # fluidPage(
+    #   titlePanel("Visualize BGC-Argo data (from Coriolis)"),
+    #   sidebarLayout(
+    #     sidebarPanel = sidebarPanel(mod_select_float_ui("sidebar"),
+    #                                 width = 2),
+    #     mainPanel = mainPanel(
+    #       tabsetPanel(
+    #         tabPanel("Core profiles",
+    #                  mod_main_plot_ui("main_plot")),
+    #         tabPanel("Auxiliary profiles"))
+    #     )
+    #   )
+    # )
+    dashboardPage(
+      dashboardHeader(
+        title = 'Visualize BGC-Argo data (from Coriolis)'
+      ),
+      dashboardSidebar(
+        mod_select_float_ui("sidebar")
+      ),
+      dashboardBody(
+        tabsetPanel(
+            tabPanel("Core profiles",
+                    mod_main_plot_ui("main_plot")),
+            tabPanel("Auxiliary profiles"))
+        )
       )
-    )
   )
 }
 

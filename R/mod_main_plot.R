@@ -8,16 +8,14 @@
 #'
 #' @importFrom shiny NS tagList
 #' @importFrom plotly plotlyOutput renderPlotly
+#' @importFrom shinydashboard box
 mod_main_plot_ui <- function(id){
   ns <- NS(id)
   tagList(
-    tabsetPanel(
-      tabPanel("Vertical profiles",
-               #style = "overflow-y:scroll; max-height: 1000px; position:relative; align: centre",
-               plotlyOutput(ns("plot_vertical_phys_profile"), width = "800px"),
-               plotlyOutput(ns("plot_vertical_bio_profile"), height = "1000px")),
-      #tabPanel("Timeseries")
-    )
+    box(title = "Physical data", status = "primary", solidHeader = TRUE, collapsible = TRUE,
+        plotlyOutput(ns("plot_vertical_phys_profile"), width = "800px")),
+    box(title = "Biogeochemical data", status = "primary", solidHeader = TRUE, collapsible = FALSE,
+      plotlyOutput(ns("plot_vertical_bio_profile"), height = "1000px"))
   )
 }
 
@@ -42,6 +40,9 @@ mod_main_plot_server <- function(id, user_float_cycle){
       # fetch user input
       wmo <- user_float_cycle$wmo()
       cycle <- user_float_cycle$cycle()
+
+      # wait for available wmo and cycle number (happens)
+      shiny::validate(shiny::need(wmo > 0, message = "Loading... Please wait."))
 
       # format cycle number
       cycle <- dplyr::if_else(as.numeric(cycle) < 10, paste0('00',cycle), dplyr::if_else(as.numeric(cycle) < 100, paste0('0',cycle), cycle))

@@ -36,9 +36,9 @@ bio_index <- bio_index %>%
   dplyr::mutate(wmo = purrr::map_chr(.x = bio_index$file, .f = function(x) unlist(stringr::str_split(x, '/'))[2])) %>%
   dplyr::distinct()
 
-#usethis::use_data(bio_index, overwrite = TRUE)
+usethis::use_data(bio_index, overwrite = TRUE)
 # write to csv (not in a pqckage fashion using testhis but eh, those data are a mess)
-vroom::vroom_write(bio_index, file = '/data-raw/bio_index.csv')
+#vroom::vroom_write(bio_index, file = '/data-raw/bio_index.csv')
 
 # C-Rover calibration
 c_rover_calib <- vroom::vroom('data-raw/crover_calibration.csv')

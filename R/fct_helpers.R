@@ -189,8 +189,9 @@ make_marker_plot <- function(tb, parameter_name, wmo){
   tmp$qc <- as.character(tmp$qc)
 
   # create discrete colour palette
-  pal <- c("yellow", '#48C9B0', '#5499C7', '#EB984E', '#E74C3C', '#ee3a8c', '#78747B')
-  pal <- stats::setNames(pal, c("0", "1", "2", "3", "4", "5", "8"))
+  pal <- c("#000000ff", "#00db00ff", "#49db00ff", "#db9000ff", "#db0000ff", "#271687ff", "#000000ff", "#000000ff", "#ae00a6ff", "#000000ff") # ARGOPY colour palette, see https://argopy.readthedocs.io/en/v0.1.14rc1/visualisation.html
+  #pal <- c("#000000ff", "#3EA344", "#5CC163", "#FF780A", "#F31634", "#9067C6", "#000000ff", "#000000ff", "#FF5CB6", "#000000ff")
+  pal <- stats::setNames(pal, c("0", "1", "2", "3", "4", "5", "6", "7", "8", "9"))
 
   # get plot attributes based on parameter_name
   plot_attributes <- get_plot_attributes(parameter_name)

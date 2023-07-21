@@ -5,6 +5,6 @@
 #' @import shiny
 #' @noRd
 app_server <- function(input, output, session) {
-  selected_float_cycle <- mod_select_float_server("sidebar_1")
-  mod_main_plot_server("main_plot_1", selected_float_cycle)
+  selected_float_cycle <- mod_select_float_server("sidebar")
+  mod_main_plot_server("main_plot", selected_float_cycle)
 }
