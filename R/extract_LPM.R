@@ -2,13 +2,13 @@
 #'
 #' @param ncfile
 #'
-#' @return a tibble with 18 columns
+#' @return a tibble with 19 columns
 #'
 #' @export
 #'
 #' @noRd
 #'
-#' @example extract_LPM_data("/data1/GDAC/AUX/coriolis/4903634/profiles/R4903634_001_aux.nc")
+#' @example extract_LPM("/data1/GDAC/AUX/coriolis/4903634/profiles/R4903634_001_aux.nc")
 #'
 
 extract_LPM <- function(ncfile){
