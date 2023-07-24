@@ -2,7 +2,7 @@
 #'
 #' @param ncfile
 #'
-#' @return a tibble with 2 columns: depth and specified taxo class
+#' @return a tibble with 5 columns: value (number of objects), class (taxonomic class), depth, nb_image (number of UVP images) and taxo_abundance (taxonomic concentration in #/L)
 #'
 #' @export
 #'
