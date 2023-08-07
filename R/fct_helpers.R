@@ -41,7 +41,7 @@ extract_parameter <- function(nc_data, parameter){
       qc <- ncdf4::ncvar_get(nc_data, paste0(parameter,'_QC'))
       qc <- as.numeric(unlist(strsplit(qc[index_column],split="")))
       return(tibble::tibble(depth = depth, value = value, qc = qc, parameter = !! parameter))
-    }else if(all(is.na(value_adjusted[,1])) == TRUE){ # if TRUE, there are no adjusted values
+    }else if(all(is.na(value_adjusted[1,])) == TRUE){ # if TRUE, there are no adjusted values
       depth <- ncdf4::ncvar_get(nc_data, 'PRES') # TODO : take the PRES ADJUSTED when possible?
       depth <- depth[,index_column]
       qc <- ncdf4::ncvar_get(nc_data, paste0(parameter,'_QC'))
@@ -49,7 +49,7 @@ extract_parameter <- function(nc_data, parameter){
       return(tibble::tibble(depth = depth, value = value, qc = qc, parameter = !! parameter))
     }else{ # there are adjusted values
       depth <- ncdf4::ncvar_get(nc_data, 'PRES') # TODO : take the PRES ADJUSTED when possible?
-      depth <- depth[,1]
+      depth <- depth[,index_column]
       qc <- ncdf4::ncvar_get(nc_data, paste0(parameter,'_ADJUSTED_QC'))
       qc <- as.numeric(unlist(strsplit(qc[index_column],split="")))
       return(tibble::tibble(depth = depth, value = value_adjusted[,index_column], qc = qc, parameter = !! parameter))
@@ -130,31 +130,31 @@ get_plot_attributes <- function(parameter){
                   'DOWN_IRRADIANCE380', 'DOWN_IRRADIANCE412', 'DOWN_IRRADIANCE490', 'DOWNWELLING_PAR')
 
   if(parameter == 'TEMP'){
-    return(list(parameter_name = parameter, xdigits = "%{x:,.1f} °C", type = "-"))
+    return(list(parameter_name = parameter, xdigits = "%{x:,.1f} °C", textdigits = "%{text:,.1f} °C", type = "-"))
   }else if(parameter == 'PSAL'){
-    return(list(parameter_name = parameter, xdigits = "%{x:,.1f} PSU", type = "-"))
+    return(list(parameter_name = parameter, xdigits = "%{x:,.1f} PSU", textdigits = "%{text:,.1f} PSU", type = "-"))
   }else if(parameter == 'DOXY'){
-    return(list(parameter_name = parameter, xdigits = "%{x:,.1f} &mu;mol/kg", type = "-"))
+    return(list(parameter_name = parameter, xdigits = "%{x:,.1f} &mu;mol/kg", textdigits = "%{text:,.1f} &mu;mol/kg", type = "-"))
   }else if(parameter == 'CHLA'){
-    return(list(parameter_name = parameter, xdigits = "%{x:,.1f} mg/m<sup>3</sup>", type = "-"))
+    return(list(parameter_name = parameter, xdigits = "%{x:,.1f} mg/m<sup>3</sup>", textdigits = "%{text:,.1f} mg/m<sup>3</sup>", type = "-"))
   }else if(parameter == 'BBP700'){
-    return(list(parameter_name = parameter, xdigits = "%{x:,.1e} m<sup>-1</sup>", type = "-"))
+    return(list(parameter_name = parameter, xdigits = "%{x:,.1e} m<sup>-1</sup>", textdigits = "%{text:,.1e}  m<sup>-1</sup>", type = "-"))
   }else if(parameter == 'TRANSMITTANCE_PARTICLE_BEAM_ATTENUATION660'){
-    return(list(parameter_name = 'CP600', xdigits = "%{x:,.2f} m<sup>-1</sup>", type = "-"))
+    return(list(parameter_name = 'CP600', xdigits = "%{x:,.2f} m<sup>-1</sup>", textdigits = "%{text:,.2f}  m<sup>-1</sup>", type = "-"))
   }else if(parameter == 'PH_IN_SITU_FREE'){
-    return(list(parameter_name = parameter, xdigits = "%{x:,.1f}", type = "-"))
+    return(list(parameter_name = parameter, xdigits = "%{x:,.1f}", textdigits = "%{text:,.1f}", type = "-"))
   }else if(parameter == 'NITRATE'){
-    return(list(parameter_name = parameter, xdigits = "%{x:,.1f} &mu;mol/kg", type = "-"))
+    return(list(parameter_name = parameter, xdigits = "%{x:,.1f} &mu;mol/kg", textdigits = "%{text:,.1f} &mu;mol/kg", type = "-"))
   }else if(parameter == 'CDOM'){
-    return(list(parameter_name = parameter, xdigits = "%{x:,.1f} ppb", type = "-"))
+    return(list(parameter_name = parameter, xdigits = "%{x:,.1f} ppb", textdigits = "%{text:,.1f} ppb", type = "-"))
   }else if(parameter == 'DOWN_IRRADIANCE380'){
-    return(list(parameter_name = parameter, xdigits = "%{x:,.1e} W m<sup>-2</sup> nm<sup>-1</sup>", type = "log"))
+    return(list(parameter_name = parameter, xdigits = "%{x:,.1e} W m<sup>-2</sup> nm<sup>-1</sup>", textdigits = "%{text:,.1e} W m<sup>-2</sup> nm<sup>-1</sup>", type = "log"))
   }else if(parameter == 'DOWN_IRRADIANCE412'){
-    return(list(parameter_name = parameter, xdigits = "%{x:,.1e} W m<sup>-2</sup> nm<sup>-1</sup>", type = "log"))
+    return(list(parameter_name = parameter, xdigits = "%{x:,.1e} W m<sup>-2</sup> nm<sup>-1</sup>", textdigits = "%{text:,.1e} W m<sup>-2</sup> nm<sup>-1</sup>", type = "log"))
   }else if(parameter == 'DOWN_IRRADIANCE490'){
-    return(list(parameter_name = parameter, xdigits = "%{x:,.1e} W m<sup>-2</sup> nm<sup>-1</sup>", type = "log"))
+    return(list(parameter_name = parameter, xdigits = "%{x:,.1e} W m<sup>-2</sup> nm<sup>-1</sup>", textdigits = "%{text:,.1e} W m<sup>-2</sup> nm<sup>-1</sup>", type = "log"))
   }else{
-    return(list(parameter_name = parameter, xdigits = "%{x:,.1f} &mu;molQuanta m<sup>-2</sup> sec <sup>-1</sup>", type = "log"))
+    return(list(parameter_name = parameter, xdigits = "%{x:,.1f} &mu;molQuanta m<sup>-2</sup> sec <sup>-1</sup>", textdigits = "%{text:,.1f} &mu;molQuanta m<sup>-2</sup> sec <sup>-1</sup>", type = "log"))
   }
 }
 
@@ -229,4 +229,59 @@ particle_plot <- function(size_name, data){
                                                   '<extra></extra>')) %>%
     plotly::layout(xaxis = list(title = paste0(size_name, ' [#/L]')), yaxis = list(title = 'DEPTH', autorange = "reversed"), showlegend = FALSE)
 
+}
+
+#' @description Function to plot oceanographic timeseries using plotly
+#'
+#' @param tb a tibble with 4 columns: depth, value, qc, juld (= date), parameter name
+#' @param parameter_name name of selected parameter to plot (one parameter only here)
+#'
+#' @return a plotly plot
+#'
+#' @export
+#'
+#' @noRd
+#'
+make_timeseries_plot <- function(tb, parameter_name, wmo){
+
+  # filter tb by parameter_name
+  tmp <- tb %>% dplyr::filter(parameter == parameter_name, !is.na(depth)) %>% dplyr::mutate(date = as.Date(juld))
+
+  # remove drifting data based on measurement code (assuming the latter are the same among all float type)s
+  #tmp <- tmp %>% dplyr::filter(measurement_code != 290, measurement_code != 300) # 300 = PARK_END and 290 = transition to PARK_END, meaning the floats is at its parking depth.
+
+  # keep only ascending profiles
+  tmp <- tmp %>% dplyr::filter(measurement_code == 590) # might not work on floats that have different measurement code....
+
+  # special case for the CP660 (at this time, values needs to be converted)
+  if(parameter_name == 'TRANSMITTANCE_PARTICLE_BEAM_ATTENUATION660'){
+    CSCdark <- ArgoDownload::c_rover_calib[ArgoDownload::c_rover_calib$WMO == wmo,]$CSCdark
+    CSCcal <- ArgoDownload::c_rover_calib[ArgoDownload::c_rover_calib$WMO == wmo,]$CSCcal
+    x <- 0.25
+    tmp$value <- -log((tmp$value - CSCdark)/(CSCcal-CSCdark))/x
+  }
+
+  # get plot attributes based on parameter_name
+  plot_attributes <- get_plot_attributes(parameter_name)
+
+  # make plotly plot
+  if(parameter_name %in% c("DOWN_IRRADIANCE380", "DOWN_IRRADIANCE412", "DOWN_IRRADIANCE490", "DOWNWELLING_PAR")){ # values are logged (log10)
+    tmp %>% plotly::plot_ly(x = ~juld, y = ~depth, type = 'scatter', mode = 'markers',
+                            color = ~log10(value),
+                            colors = viridis::viridis_pal(option = "D")(3),
+                            text = ~value,
+                            hovertemplate = paste(" DEPTH: %{y:,.0f} m<br>", paste0(plot_attributes[[1]],": ",plot_attributes[[3]]))) %>%
+      plotly::layout(xaxis = list(title = plot_attributes[[1]], range = list(min(tmp$juld, na.rm = T), max(tmp$juld, na.rm = T))),
+                     yaxis = list(title = 'DEPTH', autorange = "reversed"),
+                     showlegend = FALSE) %>% plotly::hide_colorbar() %>% plotly::toWebGL()
+  }else{
+    tmp %>% plotly::plot_ly(x = ~juld, y = ~depth, type = 'scatter', mode = 'markers',
+                            color = ~value,
+                            colors = viridis::viridis_pal(option = "D")(3),
+                            text = ~value,
+                            hovertemplate = paste(" DEPTH: %{y:,.0f} m<br>", paste0(plot_attributes[[1]],": ",plot_attributes[[3]]))) %>%
+      plotly::layout(xaxis = list(title = plot_attributes[[1]], range = list(min(tmp$juld, na.rm = T), max(tmp$juld, na.rm = T))),
+                     yaxis = list(title = 'DEPTH', autorange = "reversed"),
+                     showlegend = FALSE) %>% plotly::hide_colorbar() %>% plotly::toWebGL()
+  }
 }

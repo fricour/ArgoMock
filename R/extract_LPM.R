@@ -2,7 +2,7 @@
 #'
 #' @param ncfile
 #'
-#' @return a tibble with 19 columns
+#' @return a tibble with 19 columns (18 size classes and depth)
 #'
 #' @export
 #'

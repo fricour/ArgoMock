@@ -12,8 +12,8 @@
 mod_auxiliary_file_ui <- function(id){
   ns <- NS(id)
   tagList(
-    box(title = "UVP6 data", status = "primary", solidHeader = TRUE, collapsible = FALSE, width = 6, height = "1000px",
-        plotlyOutput(ns("plot_particle_profile"))),
+    box(title = "UVP6 data", status = "primary", solidHeader = TRUE, collapsible = FALSE, width = 12, height = "1000px",
+        plotlyOutput(ns("plot_particle_profile"), height = "900px")),
   )
 }
 
@@ -56,7 +56,7 @@ mod_auxiliary_file_server <- function(id, user_float_cycle){
     output$plot_particle_profile <- renderPlotly({
       shiny::validate(shiny::need(particle_data() != 0, message = 'No UVP6 particle data.'))
       p <- purrr::map(lpm_classes, particle_plot, data = particle_data())
-      plotly::subplot(p, nrows = 3, shareY = T, titleX = T, margin = c(0.01, 0.01, 0.05, 0.15))
+      plotly::subplot(p, nrows = 1, shareY = T, titleX = T, margin = c(0.01, 0.01, 0.05, 0.15))
     })
 
   })

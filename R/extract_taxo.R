@@ -77,7 +77,7 @@ count_nb_objects <- function(class_number, index_category, nb_objects){
   object_position <- tibble::as_tibble(apply(index_category, c(1,2), function(x) any(x == class_number)))
   object_position <- replace(object_position, object_position == F, NA) # keep only positions where TRUE, replace by NA elsewhere
 
-  # multiply TRUE boolean positions with the number of objects tibble
+  # multiply TRUE boolean positions with the number of objects
   nb_objects <- nb_objects * object_position
 
   # resume numbers in a single array

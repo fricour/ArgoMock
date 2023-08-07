@@ -59,7 +59,7 @@ mod_main_plot_server <- function(id, user_float_cycle){
 
     # plot phys data
     output$plot_vertical_phys_profile <- renderPlotly({
-      p <- purrr::map(c('TEMP', 'PSAL'), make_marker_plot, tb = data_phys())
+      p <- purrr::map(c('TEMP', 'PSAL'), make_marker_plot, tb = data_phys(), wmo = wmo)
       plotly::subplot(p, nrows = 1, shareY = T, titleX = T, margin = c(0.01, 0.01, 0.05, 0.15))
     })
 

@@ -21,7 +21,9 @@ app_ui <- function(request) {
             tabPanel("Core profiles",
                     mod_main_plot_ui("main_plot")),
             tabPanel("Auxiliary profiles",
-                    mod_auxiliary_file_ui("aux_file")))
+                    mod_auxiliary_file_ui("aux_file")),
+            tabPanel("Timeseries",
+                     mod_timeseries_ui("ts_plot")))
         )
       )
   )
